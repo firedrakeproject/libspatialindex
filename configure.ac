@@ -61,6 +61,7 @@ fi
 AC_CHECK_FUNCS([gettimeofday memset memcpy bcopy srand48])
 
 AM_CONDITIONAL([RAND_IS_CONFIG], [test "x$HAVE_SRAND48" = xtrue])
+AM_MAINTAINER_MODE([enable])
 
 AC_CONFIG_FILES([	Makefile
 					include/Makefile
@@ -72,13 +73,7 @@ AC_CONFIG_FILES([	Makefile
 					src/rtree/Makefile
 					src/mvrtree/Makefile
 					src/tprtree/Makefile
-		 			src/tools/Makefile
-		 			test/Makefile
-					test/geometry/Makefile
-					test/rtree/Makefile
-					test/mvrtree/Makefile
-					test/tprtree/Makefile
-					test/gtest/Makefile])
+					src/tools/Makefile])
 
 AC_OUTPUT
 
