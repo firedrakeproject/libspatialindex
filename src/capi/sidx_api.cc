@@ -42,7 +42,10 @@
  * solution would be to use thread-local storage from C++11, but since this library is compiled
  * with C++98 flag, this option is not available yet.
  */
-static __thread struct
+/*
+ * Configure defines this to whatever the compiler supports (or empty if no support)
+ */
+static SIDX_THREAD_LOCAL struct
 {
     int code;
     char message[LAST_ERROR_BUFFER_SIZE];

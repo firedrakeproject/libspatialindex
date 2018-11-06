@@ -37,6 +37,30 @@ AC_CHECK_HEADERS(sys/time.h,, [AC_MSG_ERROR([cannot find sys/time.h, bailing out
 AC_CHECK_HEADERS(stdint.h,, [AC_MSG_ERROR([cannot find stdint.h, bailing out])])
 AC_CHECK_HEADERS(features.h)
 
+# Check if C++ compiler supports thread local storage. Define to empty otherwise
+AC_LANG_PUSH([C++])
+tls_support=no
+AC_MSG_CHECKING([for thread local storage annotation])
+AC_CACHE_VAL([ac_cv_tls],
+  [for keyword in thread_local __thread _Thread_local '__declspec(thread)' none; do
+    AS_CASE([$keyword],
+      [none], [ac_cv_tls=none; break],
+      [AC_TRY_COMPILE(
+        [#include <stdlib.h>
+         static void foo(void) {
+           static ] $keyword [ int bar;
+           exit(1);
+         }],
+        [],
+        [ac_cv_tls=$keyword; break],
+        ac_cv_tls=none)])
+    done])
+AC_MSG_RESULT([$ac_cv_tls])
+AS_IF([test "$ac_cv_tls" != "none"],
+  [AC_DEFINE_UNQUOTED([SIDX_THREAD_LOCAL], [$ac_cv_tls], [Keyword for thread local storage])],
+  [AC_DEFINE_UNQUOTED([SIDX_THREAD_LOCAL], [], [Keyword for thread local storage not available])])
+AC_LANG_POP([C++])
+
 #MH_CXX_HEADER_TOOLS
 
 LIBS="$LIBS"
